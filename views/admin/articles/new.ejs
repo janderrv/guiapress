@@ -21,7 +21,11 @@
                         <% }) %>
                     </select>
                     <br>
-                    <button class="btn btn-success">Cadastrar</button>
+                    <% if(category){%>
+                        <button class="btn btn-success">Cadastrar</button>
+                    <% }else{ %>
+                        <button disabled class="btn btn-success">Cadastrar</button>
+                    <% } %>
                 </form>
             </div>
         </div>
