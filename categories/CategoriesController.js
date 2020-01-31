@@ -3,6 +3,7 @@ const router = express.Router();
 const Category = require("./Category");
 const slugify = require("slugify");
 const adminAuth = require("../middleware/adminauth");
+const Articles = require("../articles/Article");
 
 router.get("/admin/categories/new", adminAuth, (req, res) => {
     res.render("admin/categories/new");
@@ -32,12 +33,22 @@ router.post("/categories/delete", adminAuth, (req, res) => {
     var id = req.body.id;
     if (id != undefined) {
         if (!isNaN(id)) {//checa se id é numero
-            Category.destroy({
-                where: {
-                    id: id
+            Articles.findOne({
+                where: { categoryId: id }
+            }).then(article => {
+                if (article) {
+                    res.redirect("/admin/categories");
+                } else {
+                    Category.destroy({
+                        where: {
+                            id: id
+                        }
+                    }).then(() => {
+                        res.redirect("/admin/categories");
+                    });
                 }
-            }).then(() => {
-                res.redirect("/admin/categories");
+            }).catch(() => {
+
             });
         } else {//nao e numero
             res.redirect("/admin/categories");
